@@ -1,0 +1,16 @@
+Hotel Occupancy Report
+
+Date: [Insert Date Here]
+
+Total Reservations: [Insert Total Reservations Here]
+Total Rooms: [Insert Total Rooms Here]
+Occupied Rooms: [Insert Occupied Rooms Here]
+Available Rooms: [Insert Available Rooms Here]
+Total Revenue: [Insert Total Revenue Here]
+
+Room Details:
+Room Number | Room Type | Check-in Date | Check-out Date | Guest Name
+--------------------------------------------------------------
+[Insert Room Details Here]
+
+End of Report.

@@ -1,0 +1,606 @@
+================================================================================
+                    HOTEL RESERVATION SYSTEM
+                    COMPREHENSIVE PROJECT SUMMARY
+================================================================================
+
+PROJECT OVERVIEW
+================================================================================
+This is a Hotel Management System built in C that manages hotel operations 
+including reservations, room management, staff authentication, reporting, 
+and guest bookings. The system uses file-based data storage and provides 
+both guest and admin functionalities.
+
+SYSTEM ARCHITECTURE
+================================================================================
+The system follows a modular design with clear separation of concerns. 
+All modules interact through a central main.c file that orchestrates the 
+application flow.
+
+================================================================================
+CORE MODULES & THEIR DEFINITIONS
+================================================================================
+
+
+1. STRUCTURES MODULE (structures.h)
+================================================================================
+PURPOSE: 
+    Defines all data structures used throughout the system
+
+KEY DATA STRUCTURES:
+
+    • User
+      - username (MAX_USERNAME_LENGTH characters)
+      - password (MAX_PASSWORD_LENGTH characters)
+      Usage: Authentication and credential validation
+
+    • Room
+      - roomNumber (integer identifier)
+      - roomType (30 characters - Single/Double/Suite)
+      - price (float - price per night)
+      - isOccupied (integer flag - 0 or 1)
+      Usage: Hotel room inventory management
+
+    • Reservation
+      - reservationID (unique identifier)
+      - guestName (up to 100 characters)
+      - email (up to 100 characters)
+      - phone (up to 20 characters)
+      - roomNumber (integer)
+      - checkInDate (15 character format)
+      - checkOutDate (15 character format)
+      - totalPrice (float)
+      - status (integer - booking status)
+      Usage: Guest reservation records
+
+    • Payment
+      - reservationID (links to reservation)
+      - amount (float - payment amount)
+      - paymentDate (15 character format)
+      - paymentMethod (30 characters)
+      Usage: Payment tracking
+
+DEFINED CONSTANTS:
+    - MAX_USERNAME_LENGTH: 50
+    - MAX_PASSWORD_LENGTH: 50
+    - MAX_GUEST_NAME_LENGTH: 100
+    - MAX_DATE_LENGTH: 15
+    - MAX_EMAIL_LENGTH: 100
+    - MAX_PHONE_LENGTH: 20
+    - MAX_ROOMS: 100
+    - MAX_RESERVATIONS: 500
+
+
+2. AUTHENTICATION MODULE (auth.c / auth.h)
+================================================================================
+PURPOSE: 
+    Handles user login, credential validation, and staff management
+
+FUNCTIONS:
+
+    • authenticateUser()
+      Description: Validates user credentials at system startup
+      Parameters: void
+      Returns: int (1 if authenticated, 0 otherwise)
+      Usage: Initial login validation when application starts
+
+    • validateCredentials(const char *username, const char *password)
+      Description: Checks username/password against credentials file
+      Parameters: username string, password string
+      Returns: int (validation result)
+      Usage: Verifies login credentials
+
+    • registerNewUser()
+      Description: Creates new user accounts in the system
+      Parameters: void
+      Returns: void
+      Usage: Admin registration of new users
+
+    • displayLoginMenu()
+      Description: Shows authentication interface to user
+      Parameters: void
+      Returns: void
+      Usage: Displays login prompt and options
+
+    • viewAllStaff()
+      Description: Lists all staff members in database
+      Parameters: void
+      Returns: void
+      Usage: Admin viewing staff roster
+
+    • addStaff()
+      Description: Adds new staff credentials to database
+      Parameters: void
+      Returns: void
+      Usage: Creating new staff accounts
+
+    • deleteStaff()
+      Description: Removes staff members from database
+      Parameters: void
+      Returns: void
+      Usage: Staff removal operations
+
+    • updateStaffPassword()
+      Description: Changes existing staff member passwords
+      Parameters: void
+      Returns: void
+      Usage: Staff password management
+
+
+3. ADMIN MODULE (admin.c / admin.h)
+================================================================================
+PURPOSE: 
+    Provides administrative panel for hotel managers to oversee operations
+
+FUNCTIONS:
+
+    • displayAdminMenu()
+      Description: Shows admin interface with all available options
+      Parameters: void
+      Returns: void
+      Options: View Reservations, Manage Rooms, Manage Staff, Generate Reports
+
+    • handleAdminMenu()
+      Description: Routes admin menu selections to appropriate functions
+      Parameters: void
+      Returns: int (menu choice)
+      Usage: Main admin menu controller
+
+    • viewAllReservations()
+      Description: Displays all guest reservations in tabular format
+      Parameters: void
+      Returns: void
+      Output: Table showing ID, Guest Name, Room, Check-in, Check-out, Price
+
+    • viewAvailableRooms()
+      Description: Shows all available rooms with status
+      Parameters: void
+      Returns: void
+      Output: Room Number, Type, Price per night, Occupancy Status
+
+    • manageRooms()
+      Description: Provides room management operations menu
+      Parameters: void
+      Returns: void
+      Operations: Add, View, Update room status
+
+    • addRoom()
+      Description: Adds new room to hotel inventory
+      Parameters: void
+      Returns: void
+      Input: Room number, type, price per night
+      Status: New rooms marked as unoccupied
+
+    • viewRooms()
+      Description: Lists all rooms in inventory
+      Parameters: void
+      Returns: void
+      Output: All rooms with their details and status
+
+    • updateRoomStatus()
+      Description: Changes room occupancy status
+      Parameters: void
+      Returns: void
+      Usage: Mark rooms as occupied/available
+
+    • manageStaff()
+      Description: Provides staff management operations menu
+      Parameters: void
+      Returns: void
+      Operations: Add, Delete, Update staff credentials
+
+    • generateRevenueReport()
+      Description: Generates financial report of hotel revenue
+      Parameters: void
+      Returns: void
+      Output: Shows revenue data and financial metrics
+
+    • generateOccupancyReport()
+      Description: Creates occupancy analytics report
+      Parameters: void
+      Returns: void
+      Output: Shows occupancy rates and statistics
+
+
+4. RESERVATIONS MODULE (reservations.c / reservations.h)
+================================================================================
+PURPOSE: 
+    Core module for managing guest reservations and booking operations
+
+FUNCTIONS:
+
+    • manageReservations()
+      Description: Main reservation menu controller
+      Parameters: void
+      Returns: int (menu choice)
+      Options: Add, View, Cancel, Search reservations
+
+    • addReservation()
+      Description: Creates new guest reservation
+      Parameters: void
+      Returns: void
+      Input: Guest name, email, phone, room type, check-in/out dates
+      Process: Calculates price, assigns room, generates ID
+
+    • viewReservations()
+      Description: Displays all reservations made by guest
+      Parameters: void
+      Returns: void
+      Output: Guest's reservation details in formatted view
+
+    • cancelReservation()
+      Description: Cancels existing booking
+      Parameters: void
+      Returns: void
+      Process: Removes reservation, updates room availability
+
+    • deleteReservation()
+      Description: Removes reservation from database
+      Parameters: void
+      Returns: void
+      Usage: Data management function
+
+    • searchReservation()
+      Description: Finds specific reservations
+      Parameters: void
+      Returns: void
+      Search By: Reservation ID
+
+    • updateReservationStatus()
+      Description: Changes reservation status
+      Parameters: void
+      Returns: void
+      Status Options: Pending, Confirmed, Cancelled, Completed
+
+    • generateReservationID()
+      Description: Creates unique reservation ID for new bookings
+      Parameters: void
+      Returns: int (new ID)
+      Logic: Gets highest ID and increments by 1
+
+    • getHighestReservationID()
+      Description: Retrieves maximum reservation ID from database
+      Parameters: void
+      Returns: int (highest ID)
+      Usage: Used by generateReservationID()
+
+    • calculateDays(const char *checkIn, const char *checkOut)
+      Description: Computes number of days for reservation
+      Parameters: check-in date string, check-out date string
+      Returns: int (number of nights)
+      Usage: Calculates stay duration for pricing
+
+    • getRoomPriceByType(const char *roomType)
+      Description: Fetches room pricing based on room type
+      Parameters: room type string (Single/Double/Suite)
+      Returns: float (price per night)
+      Usage: Price calculation for reservations
+
+    • displayAvailableRoomNumbers(const char *roomType)
+      Description: Shows available rooms of specific type
+      Parameters: room type string
+      Returns: void
+      Output: Lists room numbers available for booking
+
+    • updateRoomOccupancy(int roomNumber, int isOccupied)
+      Description: Updates room occupancy status
+      Parameters: room number, occupancy flag (0=available, 1=occupied)
+      Returns: void
+      Usage: Updates room status after reservation changes
+
+    • checkRoomAvailability(int roomNumber, const char *checkIn, 
+                           const char *checkOut)
+      Description: Validates if room is available for date range
+      Parameters: room number, check-in date, check-out date
+      Returns: int (1 if available, 0 if not)
+      Usage: Prevents overbooking
+
+    • displayReservationMenu()
+      Description: Shows reservation menu options to user
+      Parameters: void
+      Returns: void
+      Options: Add, View, Cancel, Search, Update Status
+
+
+5. REPORTS MODULE (reports.c / reports.h)
+================================================================================
+PURPOSE: 
+    Generates business reports and analytics for management
+
+FUNCTIONS:
+
+    • generate_report()
+      Description: Creates comprehensive reports on system data
+      Parameters: void
+      Returns: void
+      Report Types: Occupancy reports, Revenue reports
+      Output: Formatted report data displayed to user
+
+
+6. UTILITIES MODULE (utils.c / utils.h)
+================================================================================
+PURPOSE: 
+    Provides helper functions for common operations across modules
+
+FUNCTIONS:
+
+    • initializeDataFiles()
+      Description: Sets up required data files at system startup
+      Parameters: void
+      Returns: void
+      Creates: credentials.txt, staff_credential.txt, reservations.txt, 
+               rooms.txt (if they don't exist)
+      Usage: Called in main() during initialization
+
+    • fileExists(const char *filename)
+      Description: Checks if a file exists in the file system
+      Parameters: filename string
+      Returns: int (1 if exists, 0 if not)
+      Usage: Validates file presence before operations
+
+    • clearInputBuffer()
+      Description: Clears input stream buffer
+      Parameters: void
+      Returns: void
+      Usage: Prevents input overflow after scanf operations
+
+    • isValidDate(const char *date)
+      Description: Validates date format (DD/MM/YYYY)
+      Parameters: date string
+      Returns: int (1 if valid, 0 if invalid)
+      Usage: Input validation for check-in/out dates
+
+    • compareDates(const char *date1, const char *date2)
+      Description: Compares two dates chronologically
+      Parameters: date1 string, date2 string
+      Returns: int (negative if date1 < date2, 0 if equal, positive if date1 > date2)
+      Usage: Date range validation
+
+    • displayHeader(const char *title)
+      Description: Formats and displays section headers
+      Parameters: title string
+      Returns: void
+      Usage: Console output formatting for menus and sections
+
+    • saveContinue()
+      Description: Prompts user to press continue
+      Parameters: void
+      Returns: void
+      Usage: Waits for user acknowledgment before proceeding
+
+
+7. SEARCH MODULE (search.c)
+================================================================================
+PURPOSE: 
+    Implements search functionality for finding reservations
+
+FUNCTIONS:
+
+    • searchByGuestName(const char *guestName)
+      Description: Finds reservations by guest name
+      Parameters: guest name string
+      Returns: void
+      Output: Displays matching reservation details
+      Usage: Guest can find their own reservations
+
+
+8. SORT MODULE (sort.c)
+================================================================================
+PURPOSE: 
+    Provides sorting algorithms for organizing reservation data
+
+FUNCTIONS:
+
+    • sortByCheckInDate(Reservation *reservations, int count)
+      Description: Sorts reservations by check-in date in ascending order
+      Parameters: array of Reservation structures, array count
+      Returns: void
+      Algorithm: Bubble sort
+      Modifies: Input array sorted in-place
+
+    • sortByRoomType(Reservation *reservations, int count)
+      Description: Sorts reservations alphabetically by room type
+      Parameters: array of Reservation structures, array count
+      Returns: void
+      Algorithm: Bubble sort
+      Modifies: Input array sorted in-place
+
+
+9. CANCELLATION MODULE (cancellation.c)
+================================================================================
+PURPOSE: 
+    Handles reservation cancellation operations
+
+FUNCTIONS:
+
+    • cancelReservation(int reservationID)
+      Description: Cancels reservation and removes it from records
+      Parameters: reservation ID integer
+      Returns: void
+      Process: Reads from file, writes non-cancelled reservations to temp file,
+               replaces original file, updates room availability
+      Output: Displays cancellation confirmation message
+
+
+10. MAIN MODULE (main.c)
+================================================================================
+PURPOSE: 
+    Application entry point and main menu orchestration
+
+INITIALIZATION:
+    1. Initialize data files (create if not exist)
+    2. Authenticate user login
+    3. Display and manage main menu loop
+
+MAIN MENU OPTIONS:
+    1. Manage Reservations - Add/View/Cancel/Search reservations
+    2. Generate Reports - Create occupancy and revenue reports
+    3. Admin Panel - Access administrative functions
+    4. Exit - Close application
+
+KEY FUNCTIONS:
+
+    • main()
+      Description: Application entry point
+      Logic:
+        - Initialize data files
+        - Authenticate user
+        - Loop through main menu until exit selected
+        - Route to appropriate modules based on user choice
+      Returns: 0 on successful exit
+
+    • displayMainMenu()
+      Description: Shows main menu options to user
+      Parameters: void
+      Returns: void
+
+
+================================================================================
+DATA STORAGE & FILES
+================================================================================
+
+The system uses file-based persistence with the following files located in 
+the data/ directory:
+
+1. credentials.txt
+   - Stores user login credentials
+   - Format: username,password (one user per line)
+   - Usage: User authentication
+
+2. staff_credential.txt
+   - Stores staff member credentials
+   - Format: username,password (one staff per line)
+   - Usage: Staff login and management
+
+3. reservations.txt
+   - Stores all guest reservations
+   - Format: CSV with reservation details
+   - Fields: ID, GuestName, Email, Phone, RoomNumber, 
+            CheckInDate, CheckOutDate, TotalPrice, Status
+   - Usage: Reservation management and reporting
+
+4. rooms.txt
+   - Stores hotel room inventory
+   - Format: CSV with room details
+   - Fields: RoomNumber, RoomType, Price, IsOccupied
+   - Usage: Room management and availability checking
+
+5. output/ directory
+   - Stores generated reports
+   - Contains occupancy reports and revenue reports
+   - Format: Text files with report data
+
+
+================================================================================
+SYSTEM FLOW & USER JOURNEY
+================================================================================
+
+APPLICATION STARTUP:
+    ↓
+    Initialize data files (credentials.txt, reservations.txt, rooms.txt, etc.)
+    ↓
+    AUTHENTICATION SCREEN
+    ↓
+    Validate username/password
+    ↓
+    LOGIN SUCCESS/FAILURE
+    
+IF LOGIN SUCCESSFUL:
+    ↓
+    MAIN MENU
+    |
+    ├─→ Option 1: Manage Reservations
+    |    ├─→ Add Reservation (Search rooms, select dates, book)
+    |    ├─→ View Reservations (See guest's bookings)
+    |    ├─→ Cancel Reservation (Remove booking, free room)
+    |    └─→ Search Reservation (Find by reservation ID)
+    |
+    ├─→ Option 2: Generate Reports
+    |    ├─→ Occupancy Report (Room utilization statistics)
+    |    └─→ Revenue Report (Financial data analysis)
+    |
+    ├─→ Option 3: Admin Panel
+    |    ├─→ View All Reservations (Complete booking list)
+    |    ├─→ View Available Rooms (Room inventory status)
+    |    ├─→ Manage Rooms (Add/Update/View rooms)
+    |    │   ├─→ Add Room
+    |    │   ├─→ View Rooms
+    |    │   └─→ Update Room Status
+    |    ├─→ Manage Staff
+    |    │   ├─→ View Staff
+    |    │   ├─→ Add Staff
+    |    │   ├─→ Delete Staff
+    |    │   └─→ Update Staff Password
+    |    └─→ Generate Reports
+    |
+    └─→ Option 4: Exit
+         └─→ Goodbye message, close application
+
+
+================================================================================
+TECHNICAL SPECIFICATIONS
+================================================================================
+
+PROGRAMMING LANGUAGE: C
+BUILD SYSTEM: Make (Makefile present)
+DATA STORAGE: File-based (text and CSV files)
+MAXIMUM CAPACITY:
+    - Rooms: 100
+    - Reservations: 500
+    - User accounts: Unlimited (file-based growth)
+
+DATE FORMAT: DD/MM/YYYY (validated by isValidDate function)
+CURRENCY: Indian Rupees (₹) - indicated by price formatting
+AUTHENTICATION: Basic username/password validation
+SECURITY: File-based credential storage (no encryption)
+
+
+================================================================================
+KEY FEATURES
+================================================================================
+
+1. USER AUTHENTICATION
+   - Login system for users
+   - Staff credential management
+   - Separate user and staff databases
+
+2. RESERVATION MANAGEMENT
+   - Add new reservations
+   - View guest reservations
+   - Cancel reservations with confirmation
+   - Search reservations by ID
+   - Automatic room availability checking
+   - Dynamic pricing based on room type and stay duration
+
+3. ROOM MANAGEMENT
+   - Add new rooms to inventory
+   - Update room occupancy status
+   - View available rooms filtered by type
+   - Occupancy tracking
+
+4. REPORTING
+   - Occupancy reports (room utilization)
+   - Revenue reports (financial analysis)
+   - Report generation and storage
+
+5. ADMIN FUNCTIONS
+   - View all reservations at once
+   - Complete room inventory management
+   - Staff management (add, delete, update passwords)
+   - Report generation capability
+   - Access to all system data
+
+6. DATA UTILITIES
+   - Date validation and comparison
+   - Automatic file initialization
+   - Input buffer management
+   - Formatted console output
+
+
+================================================================================
+END OF PROJECT SUMMARY
+================================================================================
+Generated: 27 April 2026
+Project: Hotel Reservation System
+Language: C
+Status: Documented and Ready for Reference
+================================================================================
